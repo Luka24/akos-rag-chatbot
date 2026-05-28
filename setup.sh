@@ -6,14 +6,9 @@ set -e
 echo ">>> Nameščam odvisnosti..."
 pip install -r requirements.txt
 
-# Najdi pravo lokacijo site-packages prek samega paketa (deluje vsepovsod)
+# Najdi site-packages lokacijo brez uvoza paketa (pip show ne sproži logov)
 echo ">>> Iščem lokacijo nameščenih paketov..."
-SITE=$(python3 -c "
-import chainlit, os, sys
-# Chainlit ob uvozu izpiše konfig sporočila na stdout – jih preusmerimo
-path = os.path.dirname(os.path.dirname(chainlit.__file__))
-print(path)
-" 2>/dev/null)
+SITE=$(pip show chainlit 2>/dev/null | grep "^Location:" | cut -d' ' -f2)
 echo "    site-packages: $SITE"
 
 patch_file() {
