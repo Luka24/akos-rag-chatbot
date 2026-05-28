@@ -1,55 +1,80 @@
 #!/bin/bash
 # AKOS RAG Chatbot – namestitev in popravki
 # Zaženi enkrat po kloniranju: bash setup.sh
-
 set -e
 
 echo ">>> Nameščam odvisnosti..."
 pip install -r requirements.txt
 
-echo ">>> Iščem nameščene pakete..."
-SITE=$(python3 -c "import site; print(site.getsitepackages()[0])")
+# Najdi pravo lokacijo site-packages prek samega paketa (deluje vsepovsod)
+echo ">>> Iščem lokacijo nameščenih paketov..."
+SITE=$(python3 -c "
+import chainlit, os, sys
+# Chainlit ob uvozu izpiše konfig sporočila na stdout – jih preusmerimo
+path = os.path.dirname(os.path.dirname(chainlit.__file__))
+print(path)
+" 2>/dev/null)
 echo "    site-packages: $SITE"
 
-# ── Popravek 1: chainlit/step.py – ContextVar brez defaulta ──────────────
-STEP="$SITE/chainlit/step.py"
-if [ -f "$STEP" ]; then
-  sed -i.bak \
-    's/local_steps\.get() or \[\]/local_steps.get([]) or []/g' \
-    "$STEP"
-  sed -i.bak \
-    's/= local_steps\.get()$/= local_steps.get(None)/g' \
-    "$STEP"
-  echo "    [OK] chainlit/step.py popravljen"
-else
-  echo "    [!!] chainlit/step.py ni najden – preskoči"
-fi
+patch_file() {
+  local FILE="$1"
+  local PATTERN="$2"
+  local REPLACEMENT="$3"
+  local DESC="$4"
 
-# ── Popravek 2: engineio/payload.py – max_decode_packets premajhen ────────
-PAYLOAD="$SITE/engineio/payload.py"
-if [ -f "$PAYLOAD" ]; then
-  sed -i.bak \
-    's/max_decode_packets = 16/max_decode_packets = 512/' \
-    "$PAYLOAD"
-  echo "    [OK] engineio/payload.py popravljen"
-else
-  echo "    [!!] engineio/payload.py ni najden – preskoči"
-fi
+  if [ ! -f "$FILE" ]; then
+    echo "    [!!] $DESC – datoteka ne obstaja, preskoči"
+    return
+  fi
+  if grep -q "$REPLACEMENT" "$FILE" 2>/dev/null; then
+    echo "    [==] $DESC – že popravljen, preskoči"
+    return
+  fi
+  sed -i.bak "s/$PATTERN/$REPLACEMENT/g" "$FILE"
+  echo "    [OK] $DESC"
+}
 
-# ── Popravek 3: engineio/async_socket.py – strict UTF-8 decode ───────────
-ASOCK="$SITE/engineio/async_socket.py"
-if [ -f "$ASOCK" ]; then
-  sed -i.bak \
-    "s/.decode('utf-8')/.decode('utf-8', errors='replace')/" \
-    "$ASOCK"
-  echo "    [OK] engineio/async_socket.py popravljen"
-else
-  echo "    [!!] engineio/async_socket.py ni najden – preskoči"
-fi
+# ── Popravek 1a: chainlit/step.py – local_steps.get() or [] ──────────────
+patch_file \
+  "$SITE/chainlit/step.py" \
+  "local_steps\\.get() or \\[\\]" \
+  "local_steps.get([]) or []" \
+  "chainlit/step.py (ContextVar default za liste)"
+
+# ── Popravek 1b: chainlit/step.py – = local_steps.get() ──────────────────
+# Posebej za vrstice kjer rezultat shranimo v spremenljivko
+python3 - "$SITE/chainlit/step.py" <<'PYEOF'
+import sys, re
+path = sys.argv[1]
+try:
+    txt = open(path).read()
+    if 'local_steps.get(None)' in txt:
+        print("    [==] chainlit/step.py (ContextVar default za None) – že popravljen, preskoči")
+    else:
+        patched = re.sub(r'= local_steps\.get\(\)(\s*$)', r'= local_steps.get(None)\1', txt, flags=re.MULTILINE)
+        open(path, 'w').write(patched)
+        print("    [OK] chainlit/step.py (ContextVar default za None)")
+except Exception as e:
+    print(f"    [!!] chainlit/step.py – napaka: {e}")
+PYEOF
+
+# ── Popravek 2: engineio/payload.py – max_decode_packets ─────────────────
+patch_file \
+  "$SITE/engineio/payload.py" \
+  "max_decode_packets = 16" \
+  "max_decode_packets = 512" \
+  "engineio/payload.py (max_decode_packets)"
+
+# ── Popravek 3: engineio/async_socket.py – UTF-8 strict decode ───────────
+patch_file \
+  "$SITE/engineio/async_socket.py" \
+  ".decode('utf-8')" \
+  ".decode('utf-8', errors='replace')" \
+  "engineio/async_socket.py (UTF-8 decode)"
 
 echo ""
 echo "============================================"
-echo " Namestitev končana. Zagon:"
+echo " Namestitev končana. Zagon v 3 terminalih:"
 echo ""
 echo "  Terminal 1:  uvicorn api:app --port 8000"
 echo "  Terminal 2:  uvicorn app:app --port 7860"
