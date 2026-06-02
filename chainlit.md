@@ -1,14 +1,27 @@
-# Welcome to Chainlit! 🚀🤖
+# AKOS Asistent
 
-Hi there, Developer! 👋 We're excited to have you on board. Chainlit is a powerful tool designed to help you prototype, debug and share applications built on top of LLMs.
+**Agencija za komunikacijska omrežja in storitve Republike Slovenije**
 
-## Useful Links 🔗
+Pomočnik za vprašanja s področja elektronskih komunikacij. Odgovori temeljijo na uradnih dokumentih AKOS – ZEKom-2, splošnih aktih in odločbah Sveta AKOS.
 
-- **Documentation:** Get started with our comprehensive [Chainlit Documentation](https://docs.chainlit.io) 📚
-- **Discord Community:** Join our friendly [Chainlit Discord](https://discord.gg/k73SQ3FyUh) to ask questions, share your projects, and connect with other developers! 💬
+## Področja, ki jih pokrivam
 
-We can't wait to see what you create with Chainlit! Happy coding! 💻😊
+| Področje | Tipično vprašanje |
+|---|---|
+| Radijske frekvence in 5G | *Kako poteka dodelitev frekvenc v pasu 3,6 GHz?* |
+| Pritožbe zoper operaterje | *Kako vložim pritožbo zoper mobilnega operaterja?* |
+| ZEKom-2 in podzakonski akti | *Kaj določa 207. člen ZEKom-2?* |
+| Prenosljivost telefonskih številk | *V kolikšnem času je treba prenesti mobilno številko?* |
+| Univerzalna storitev | *Do kakšne hitrosti interneta imam pravico?* |
 
-## Welcome screen
+## Kako uporabljati
 
-To modify the welcome screen, edit the `chainlit.md` file at the root of your project. If you do not want a welcome screen, just leave this file empty.
+1. **Vnesite vprašanje** v polje spodaj, ali kliknite eno od pripravljenih kartic.
+2. Asistent najprej **poišče dokumente** v indeksu AKOS, nato sestavi odgovor.
+3. **Vire** najdete v stranskem panelu – vsak vir je klikljiv in vsebuje izvirno povezavo.
+4. **Stopnja zaupanja** označuje, kako močno odgovor temelji na najdenih virih.
+
+## Pomembno
+
+> Asistent ponuja informativne odgovore. Za pravno zavezujoča stališča se obrnite na AKOS:
+> **info@akos-rs.si** &nbsp;·&nbsp; **01 583 63 00** &nbsp;·&nbsp; pon.–pet. 9:00–13:00

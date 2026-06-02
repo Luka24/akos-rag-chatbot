@@ -1,0 +1,256 @@
+/* ────────────────────────────────────────────────────────────
+   AKOS Asistent – Chainlit custom theme
+   Paleta usklajena z grafično podobo AKOS:
+     --akos-blue-dark : #003B8E
+     --akos-blue      : #0055CC
+     --akos-blue-soft : #E8F0FE
+   ──────────────────────────────────────────────────────────── */
+
+:root {
+  --akos-blue-dark:  #003B8E;
+  --akos-blue:       #0055CC;
+  --akos-blue-soft:  #E8F0FE;
+  --akos-blue-mid:   #B3C9F0;
+  --akos-green:      #28A745;
+  --akos-amber:      #F59E0B;
+  --akos-red:        #EF4444;
+
+  /* Chainlit primary token override */
+  --primary: var(--akos-blue);
+  --primary-foreground: #ffffff;
+}
+
+/* ── Header (gradient pas v slogu AKOS) ─────────────────── */
+header,
+header[role="banner"],
+.cl-header,
+nav[aria-label="Header"] {
+  background: linear-gradient(135deg, var(--akos-blue-dark) 0%, var(--akos-blue) 100%) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 10px rgba(0, 60, 150, 0.18);
+}
+
+header * ,
+header a,
+header button {
+  color: #ffffff !important;
+}
+
+/* Header link ikone */
+header a[href*="akos-rs.si"],
+header a[href*="uradni-list.si"] {
+  opacity: 0.92;
+  transition: opacity 0.15s ease;
+}
+header a[href*="akos-rs.si"]:hover,
+header a[href*="uradni-list.si"]:hover {
+  opacity: 1;
+}
+
+/* ── Glavni layout ──────────────────────────────────────── */
+body,
+#root {
+  font-family: 'Segoe UI', system-ui, -apple-system, Arial, sans-serif !important;
+}
+
+/* ── Sporočila – bubble ─────────────────────────────────── */
+.message-content,
+[data-message-role="assistant"] .message-content {
+  font-size: 0.96rem;
+  line-height: 1.65;
+}
+
+/* AI sporočilo: subtilen modri rob */
+.step,
+[data-step-type="assistant_message"] {
+  border-radius: 14px;
+}
+
+/* User sporočilo: AKOS modra */
+[data-step-type="user_message"] .message-content,
+.user-message,
+div[class*="userMessage"] {
+  background: var(--akos-blue) !important;
+  color: #ffffff !important;
+  border-top-right-radius: 4px;
+}
+
+/* ── Tabele v markdownu ─────────────────────────────────── */
+.markdown-body table,
+.message-content table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 8px 0;
+  font-size: 0.9em;
+}
+.markdown-body th,
+.message-content th {
+  background: var(--akos-blue-soft) !important;
+  color: var(--akos-blue-dark) !important;
+  padding: 6px 10px !important;
+  text-align: left;
+  border-bottom: 2px solid var(--akos-blue-mid);
+}
+.markdown-body td,
+.message-content td {
+  padding: 6px 10px !important;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+/* ── Inline code ────────────────────────────────────────── */
+.markdown-body code,
+.message-content code {
+  background: #f1f5f9 !important;
+  color: var(--akos-blue-dark) !important;
+  padding: 1px 6px !important;
+  border-radius: 4px !important;
+  font-size: 0.88em !important;
+}
+
+/* ── Blockquote (citati iz dokumentov) ──────────────────── */
+.markdown-body blockquote,
+.message-content blockquote {
+  border-left: 4px solid var(--akos-blue) !important;
+  background: var(--akos-blue-soft);
+  padding: 8px 14px !important;
+  margin: 8px 0 !important;
+  border-radius: 6px;
+  color: #334155;
+  font-style: italic;
+}
+
+/* ── Povezave ───────────────────────────────────────────── */
+.markdown-body a,
+.message-content a {
+  color: var(--akos-blue) !important;
+  text-decoration: none;
+  border-bottom: 1px dotted var(--akos-blue-mid);
+}
+.markdown-body a:hover,
+.message-content a:hover {
+  color: var(--akos-blue-dark) !important;
+  border-bottom-style: solid;
+}
+
+/* ── Starter kartice (na začetnem zaslonu) ──────────────── */
+button[class*="starter"],
+.starter-card,
+button[aria-label*="Starter"] {
+  border: 1px solid var(--akos-blue-mid) !important;
+  background: #ffffff !important;
+  transition: all 0.18s ease;
+  border-radius: 12px !important;
+}
+button[class*="starter"]:hover,
+.starter-card:hover,
+button[aria-label*="Starter"]:hover {
+  border-color: var(--akos-blue) !important;
+  background: var(--akos-blue-soft) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 85, 204, 0.15);
+}
+
+/* ── Akcijski gumbi (👍 / 👎 / 📋) ──────────────────────── */
+button[class*="action"] {
+  border-radius: 999px !important;
+  border: 1px solid var(--akos-blue-mid) !important;
+  background: #ffffff !important;
+  font-size: 0.82rem !important;
+  padding: 4px 12px !important;
+  transition: all 0.15s ease;
+}
+button[class*="action"]:hover {
+  background: var(--akos-blue-soft) !important;
+  border-color: var(--akos-blue) !important;
+  color: var(--akos-blue-dark) !important;
+}
+
+/* ── Side panel (viri) ──────────────────────────────────── */
+[data-element-display="side"],
+.element-sidebar {
+  background: #f8fafc !important;
+}
+[data-element-display="side"] h1,
+[data-element-display="side"] h2,
+[data-element-display="side"] h3 {
+  color: var(--akos-blue-dark) !important;
+}
+
+/* ── Vnosno polje ───────────────────────────────────────── */
+textarea[placeholder],
+div[class*="inputContainer"] textarea {
+  border: 2px solid var(--akos-blue-mid) !important;
+  border-radius: 10px !important;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+textarea[placeholder]:focus,
+div[class*="inputContainer"] textarea:focus {
+  border-color: var(--akos-blue) !important;
+  box-shadow: 0 0 0 3px rgba(0, 85, 204, 0.12) !important;
+  outline: none !important;
+}
+
+/* ── Pošlji gumb ────────────────────────────────────────── */
+button[type="submit"],
+button[aria-label*="Send"],
+button[aria-label*="end message"] {
+  background: var(--akos-blue) !important;
+  color: white !important;
+}
+button[type="submit"]:hover,
+button[aria-label*="Send"]:hover,
+button[aria-label*="end message"]:hover {
+  background: var(--akos-blue-dark) !important;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────── */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb {
+  background: var(--akos-blue-mid);
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--akos-blue);
+}
+
+/* ── Step / proces (Iščem v bazi znanja…) ───────────────── */
+[data-step-type="tool"],
+.step-tool {
+  background: var(--akos-blue-soft) !important;
+  border-left: 3px solid var(--akos-blue) !important;
+  border-radius: 6px;
+}
+
+/* ── Vir / source kartica (custom v sporočilu) ──────────── */
+.akos-source-card {
+  border: 1px solid #dce8ff;
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin: 8px 0;
+  background: #f8f9ff;
+}
+.akos-source-card .akos-source-num {
+  display: inline-block;
+  background: var(--akos-blue);
+  color: white;
+  border-radius: 50%;
+  width: 22px; height: 22px;
+  text-align: center; line-height: 22px;
+  font-size: 0.78rem; font-weight: 700;
+  margin-right: 7px;
+}
+
+/* ── Značke za zaupanje ─────────────────────────────────── */
+.akos-badge {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-right: 6px;
+}
+.akos-badge-hi  { background: #dcfce7; color: #166534; }
+.akos-badge-mid { background: #fef3c7; color: #92400e; }
+.akos-badge-lo  { background: #fee2e2; color: #991b1b; }
+.akos-badge-topic { background: var(--akos-blue-soft); color: var(--akos-blue-dark); }

@@ -53,21 +53,21 @@ edit_message = true
 
 [UI]
 # Name of the assistant.
-name = "Assistant"
+name = "AKOS Asistent"
 
-# default_theme = "dark"
+default_theme = "light"
 
-# layout = "wide"
+layout = "wide"
 
 # Description of the assistant. This is used for HTML tags.
-# description = ""
+description = "Pomočnik Agencije za komunikacijska omrežja in storitve RS – odgovori temeljijo na ZEKom-2, splošnih aktih in uradnih dokumentih AKOS."
 
 # Chain of Thought (CoT) display mode. Can be "hidden", "tool_call" or "full".
-cot = "full"
+cot = "tool_call"
 
 # Specify a CSS file that can be used to customize the user interface.
 # The CSS file can be served from the public directory or via an external link.
-# custom_css = "/public/test.css"
+custom_css = "/public/akos.css"
 
 # Specify a Javascript file that can be used to customize the user interface.
 # The Javascript file can be served from the public directory.
@@ -82,10 +82,20 @@ cot = "full"
 # custom_build = "./public/build"
 
 # Specify optional one or more custom links in the header.
-# [[UI.header_links]]
-#     name = "Issues"
-#     icon_url = "https://avatars.githubusercontent.com/u/128686189?s=200&v=4"
-#     url = "https://github.com/Chainlit/chainlit/issues"
+[[UI.header_links]]
+    name = "AKOS spletna stran"
+    icon_url = "https://www.akos-rs.si/favicon.ico"
+    url = "https://www.akos-rs.si"
+
+[[UI.header_links]]
+    name = "ZEKom-2 (Uradni list)"
+    icon_url = "https://www.uradni-list.si/favicon.ico"
+    url = "https://www.uradni-list.si/glasilo-uradni-list-rs/vsebina/2022-01-3901"
+
+[[UI.header_links]]
+    name = "Vlogi pritožbo"
+    icon_url = "https://www.akos-rs.si/favicon.ico"
+    url = "https://www.akos-rs.si/za-uporabnike/pritozbe"
 
 [meta]
 generated_by = "2.3.0"
