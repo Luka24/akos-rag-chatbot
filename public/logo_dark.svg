@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 56" width="220" height="56" fill="none">
+  <!-- Bel zaobljen kvadrat z modrim signalom (za temno temo) -->
+  <rect x="2" y="6" width="44" height="44" rx="10" fill="#ffffff"/>
+  <g stroke="#003B8E" stroke-width="2.6" stroke-linecap="round" fill="none">
+    <path d="M11 36 A 14 14 0 0 1 37 36" opacity="0.55"/>
+    <path d="M16 36 A 9 9 0 0 1 32 36" opacity="0.85"/>
+    <path d="M20 36 A 5 5 0 0 1 28 36"/>
+  </g>
+  <circle cx="24" cy="36" r="2.4" fill="#003B8E"/>
+
+  <!-- "AKOS" wordmark v beli (za temno ozadje) -->
+  <text x="58" y="36"
+        font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+        font-weight="800"
+        font-size="26"
+        fill="#ffffff"
+        letter-spacing="1">AKOS</text>
+
+  <text x="58" y="50"
+        font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
+        font-weight="500"
+        font-size="9"
+        fill="#B3C9F0"
+        letter-spacing="0.5"
+        opacity="0.85">Asistent · ZEKom-2</text>
+</svg>

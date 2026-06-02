@@ -133,21 +133,40 @@ div[class*="userMessage"] {
 }
 
 /* ── Starter kartice (na začetnem zaslonu) ──────────────── */
-button[class*="starter"],
-.starter-card,
-button[aria-label*="Starter"] {
-  border: 1px solid var(--akos-blue-mid) !important;
+/* Chainlit jim postavi id="starter-<label-slug>", brez specifične class */
+button[id^="starter-"] {
+  border: 1.5px solid var(--akos-blue-mid) !important;
   background: #ffffff !important;
   transition: all 0.18s ease;
-  border-radius: 12px !important;
+  border-radius: 999px !important;
+  padding: 10px 18px !important;
+  min-height: 46px !important;
+  height: auto !important;
 }
-button[class*="starter"]:hover,
-.starter-card:hover,
-button[aria-label*="Starter"]:hover {
+button[id^="starter-"]:hover {
   border-color: var(--akos-blue) !important;
   background: var(--akos-blue-soft) !important;
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 85, 204, 0.15);
+  box-shadow: 0 4px 12px rgba(0, 85, 204, 0.18);
+}
+/* Starter ikona: forsirano vidna – bel okvir, modra obroba */
+button[id^="starter-"] img {
+  width: 26px !important;
+  height: 26px !important;
+  min-width: 26px !important;
+  background: #ffffff !important;
+  border: 1px solid var(--akos-blue-mid) !important;
+  border-radius: 6px !important;
+  padding: 3px !important;
+  flex-shrink: 0 !important;
+  display: inline-block !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+button[id^="starter-"] p {
+  color: var(--akos-blue-dark) !important;
+  font-weight: 600 !important;
+  font-size: 0.88rem !important;
 }
 
 /* ── Akcijski gumbi (👍 / 👎 / 📋) ──────────────────────── */
@@ -254,3 +273,64 @@ button[aria-label*="end message"]:hover {
 .akos-badge-mid { background: #fef3c7; color: #92400e; }
 .akos-badge-lo  { background: #fee2e2; color: #991b1b; }
 .akos-badge-topic { background: var(--akos-blue-soft); color: var(--akos-blue-dark); }
+
+
+/* ════════════════════════════════════════════════════════════
+   Skrij Chainlit oznake (watermark, povezave na chainlit.io)
+   ════════════════════════════════════════════════════════════ */
+
+a.watermark,
+a[href*="chainlit.io"],
+a[href*="chainlit-cloud"],
+a[href*="github.com/Chainlit"] {
+  display: none !important;
+  visibility: hidden !important;
+  height: 0 !important;
+  width: 0 !important;
+  overflow: hidden !important;
+  pointer-events: none !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   AKOS logotip v glavi
+   ════════════════════════════════════════════════════════════
+   Chainlit izriše <img class="logo" src="/logo?theme=..."> – sliko
+   nadomestimo z logo_light.svg / logo_dark.svg v /public/.
+   Tukaj samo poskrbimo, da je dovolj velika in ima primeren razmik. */
+
+img.logo,
+img[alt="logo"],
+header img[src*="/logo"] {
+  height: 38px !important;
+  width: auto !important;
+  max-width: 200px !important;
+  object-fit: contain;
+  display: block;
+}
+
+/* Sidebar/menu logo - na ozkih zaslonih je manjši */
+nav img.logo,
+aside img.logo {
+  height: 32px !important;
+  max-width: 160px !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   Diskreten "Made by AKOS" footer (nadomesti Chainlit watermark)
+   ════════════════════════════════════════════════════════════
+   Postavljen v levi spodnji kot z nizkim z-index, da ne posega
+   v input bar (ki sedi na dnu na sredini z višjim z-index). */
+
+body::after {
+  content: "AKOS · Agencija za komunikacijska omrežja in storitve RS";
+  position: fixed;
+  bottom: 4px;
+  left: 14px;
+  font-size: 0.68rem;
+  color: var(--akos-blue-mid);
+  font-family: 'Segoe UI', Arial, sans-serif;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.6;
+  letter-spacing: 0.2px;
+}

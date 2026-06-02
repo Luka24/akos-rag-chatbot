@@ -12,6 +12,7 @@ Resnični RAG backend bo zamenjal mock API – tukaj poliramo izgled.
 from __future__ import annotations
 
 import asyncio
+import base64
 import httpx
 import chainlit as cl
 
@@ -25,6 +26,37 @@ ASSISTANT_NAME = "AKOS Asistent"
 
 
 # ---------------------------------------------------------------------------
+# Ikone za starter kartice
+# ---------------------------------------------------------------------------
+# Chainlit izriše icon kot <img src="..."> v okencu 20×20.  Da se izognemo
+# kakršnimkoli težavam s strežniškim MIME tipom za /public/, ikone vstavimo
+# kot base64 data URI – brskalnik jih nariše neposredno.
+#
+# Vse ikone uporabljajo AKOS modro (#0055CC).
+
+def _svg_to_data_uri(svg: str) -> str:
+    b64 = base64.b64encode(svg.encode("utf-8")).decode("ascii")
+    return f"data:image/svg+xml;base64,{b64}"
+
+
+_ICON_ANTENNA = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#0055CC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12a8 8 0 0 1 16 0"/><path d="M7.5 12a4.5 4.5 0 0 1 9 0"/><circle cx="12" cy="12" r="1.6" fill="#0055CC" stroke="none"/><path d="M12 14v8"/><path d="M9 22h6"/></svg>"""
+
+_ICON_COMPLAINT = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#0055CC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/><line x1="12" y1="8" x2="12" y2="12"/><circle cx="12" cy="15" r="1" fill="#0055CC" stroke="none"/></svg>"""
+
+_ICON_LAW = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#0055CC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 7h14"/><path d="M4 13l2-6 2 6"/><path d="M16 13l2-6 2 6"/><path d="M3 13a3 3 0 0 0 6 0"/><path d="M15 13a3 3 0 0 0 6 0"/><path d="M8 21h8"/></svg>"""
+
+_ICON_PHONE = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#0055CC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2" width="12" height="20" rx="2.5"/><line x1="10" y1="18.5" x2="14" y2="18.5"/><line x1="9" y1="5.5" x2="15" y2="5.5" opacity="0.4"/></svg>"""
+
+_ICON_WIFI = """<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="#0055CC" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1.5 8.5a16 16 0 0 1 21 0"/><path d="M5 12a11 11 0 0 1 14 0"/><path d="M8.5 15.5a6 6 0 0 1 7 0"/><circle cx="12" cy="20" r="1.4" fill="#0055CC" stroke="none"/></svg>"""
+
+ICON_ANTENNA = _svg_to_data_uri(_ICON_ANTENNA)
+ICON_COMPLAINT = _svg_to_data_uri(_ICON_COMPLAINT)
+ICON_LAW = _svg_to_data_uri(_ICON_LAW)
+ICON_PHONE = _svg_to_data_uri(_ICON_PHONE)
+ICON_WIFI = _svg_to_data_uri(_ICON_WIFI)
+
+
+# ---------------------------------------------------------------------------
 # Starter prompts – kartice, ki se prikažejo na uvodnem zaslonu
 # ---------------------------------------------------------------------------
 
@@ -34,27 +66,27 @@ async def starters():
         cl.Starter(
             label="Dodelitev 5G frekvenc",
             message="Kako poteka postopek dodelitve radijskih frekvenc za omrežja 5G?",
-            icon="/public/icons/antenna.svg",
+            icon=ICON_ANTENNA,
         ),
         cl.Starter(
             label="Pritožba zoper operaterja",
             message="Kako vložim pritožbo zoper mobilnega operaterja in v kakšnem roku mora odgovoriti?",
-            icon="/public/icons/complaint.svg",
+            icon=ICON_COMPLAINT,
         ),
         cl.Starter(
             label="ZEKom-2 – pregled",
             message="Katera so ključna področja, ki jih ureja ZEKom-2?",
-            icon="/public/icons/law.svg",
+            icon=ICON_LAW,
         ),
         cl.Starter(
             label="Prenos telefonske številke",
             message="V kolikšnem času mora operater prenesti mobilno telefonsko številko?",
-            icon="/public/icons/phone.svg",
+            icon=ICON_PHONE,
         ),
         cl.Starter(
             label="Univerzalna storitev",
             message="Do kakšne hitrosti interneta sem upravičen v okviru univerzalne storitve?",
-            icon="/public/icons/wifi.svg",
+            icon=ICON_WIFI,
         ),
     ]
 
@@ -91,14 +123,20 @@ def confidence_badge(conf: float) -> str:
     return f"{emoji} **{label}** `{bar}` {pct}%"
 
 
+def source_element_name(idx: int) -> str:
+    """Kratko, predvidljivo ime elementa – mora se *dobesedno* pojaviti v
+    besedilu sporočila, da Chainlit prikaže klikljiv žeton za stranski panel."""
+    return f"Vir {idx}"
+
+
 def format_source_content(idx: int, src: dict) -> str:
-    """Markdown za posamezen vir v stranskem panelu."""
+    """Markdown za vsebino vira v stranskem panelu (odpre se ob kliku)."""
     return (
-        f"# Vir {idx}\n\n"
+        f"# 📄 Vir {idx}\n\n"
         f"## {src['title']}\n\n"
         f"**ID dokumenta:** `{src['doc_id']}`\n\n"
-        f"**Povezava:**  \n"
-        f"<{src['url']}>\n\n"
+        f"**Povezava do izvirnika:**  \n"
+        f"[{src['url']}]({src['url']})\n\n"
         f"---\n\n"
         f"### Izsek iz dokumenta\n\n"
         f"> {src['excerpt']}\n\n"
@@ -108,12 +146,17 @@ def format_source_content(idx: int, src: dict) -> str:
 
 
 def sources_summary_md(sources: list[dict]) -> str:
-    """Kratek povzetek virov pod odgovorom – kliknete na vir za podrobnosti."""
+    """Povzetek virov pod odgovorom – vsak `Vir N` se pojavi v besedilu kot
+    klikljiv žeton, ker se Chainlit elementi z display='side' aktivirajo
+    šele, ko se ime elementa dobesedno pojavi v sporočilu."""
     if not sources:
         return ""
-    lines = ["\n\n**📄 Uporabljeni viri:**\n"]
+    lines = ["\n\n---\n\n**📄 Uporabljeni viri:**\n"]
     for i, s in enumerate(sources, 1):
-        lines.append(f"{i}. **{s['title']}**  \n   `{s['doc_id']}` · [odpri dokument]({s['url']})")
+        name = source_element_name(i)
+        # Ime "Vir N" mora ostati golo (brez markdown, brez oklepajev),
+        # da ga Chainlit pretvori v klikljiv side-panel sprožilec.
+        lines.append(f"- {name} — **{s['title']}** · `{s['doc_id']}`")
     return "\n".join(lines)
 
 
@@ -171,12 +214,14 @@ async def reply(message: cl.Message):
     conf: float = data["confidence_score"]
     topic: str = data["topic"]
 
-    # 2) Pripravi viri kot stranski (side) elementi – kliknete na ime in se odpre panel
+    # 2) Pripravi vire kot stranske (side) elemente.
+    #    Pomembno: ime elementa MORA biti dobesedno prisotno v besedilu sporočila –
+    #    šele takrat Chainlit izriše klikljiv žeton, ki odpre stranski panel.
     side_elements: list[cl.Text] = []
     for i, s in enumerate(sources, 1):
         side_elements.append(
             cl.Text(
-                name=f"Vir {i}: {s['title'][:60]}",
+                name=source_element_name(i),
                 content=format_source_content(i, s),
                 display="side",
             )

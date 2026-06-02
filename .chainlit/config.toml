@@ -84,17 +84,17 @@ custom_css = "/public/akos.css"
 # Specify optional one or more custom links in the header.
 [[UI.header_links]]
     name = "AKOS spletna stran"
-    icon_url = "https://www.akos-rs.si/favicon.ico"
+    icon_url = "/public/header-web.svg"
     url = "https://www.akos-rs.si"
 
 [[UI.header_links]]
     name = "ZEKom-2 (Uradni list)"
-    icon_url = "https://www.uradni-list.si/favicon.ico"
+    icon_url = "/public/header-law.svg"
     url = "https://www.uradni-list.si/glasilo-uradni-list-rs/vsebina/2022-01-3901"
 
 [[UI.header_links]]
     name = "Vlogi pritožbo"
-    icon_url = "https://www.akos-rs.si/favicon.ico"
+    icon_url = "/public/header-complaint.svg"
     url = "https://www.akos-rs.si/za-uporabnike/pritozbe"
 
 [meta]
