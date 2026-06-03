@@ -195,31 +195,49 @@ button[class*="action"]:hover {
   color: var(--akos-blue-dark) !important;
 }
 
-/* ── Vnosno polje ───────────────────────────────────────── */
+/* ── Vnosno polje ───────────────────────────────────────────
+   Pustimo Chainlit default vidu (zaobljen okvir s sivo obrobo
+   in subtle senco) – samo besedilo poskrbimo, da je levo
+   poravnano in da kazalec ima primerno barvo.
+   ───────────────────────────────────────────────────────────── */
 textarea[placeholder],
-div[class*="inputContainer"] textarea {
-  border: 2px solid var(--akos-blue-mid) !important;
-  border-radius: 10px !important;
-  transition: border-color 0.18s ease, box-shadow 0.18s ease;
-}
-textarea[placeholder]:focus,
-div[class*="inputContainer"] textarea:focus {
-  border-color: var(--akos-blue) !important;
-  box-shadow: 0 0 0 3px rgba(0, 85, 204, 0.12) !important;
-  outline: none !important;
+div[class*="inputContainer"] textarea,
+#chat-input,
+textarea#chat-input {
+  text-align: left !important;
+  caret-color: var(--akos-blue) !important;
 }
 
-/* ── Pošlji gumb ────────────────────────────────────────── */
+/* ── Pošlji / Stop gumb ─────────────────────────────────────
+   Chainlit gumboma določi id="chat-submit" oz. id="stop-button".
+   Forsiramo AKOS modro (privzeto izgleda rdeč/destructive). */
+button#chat-submit,
+button#stop-button,
 button[type="submit"],
-button[aria-label*="Send"],
-button[aria-label*="end message"] {
+button[aria-label*="Send" i],
+button[aria-label*="end message" i] {
   background: var(--akos-blue) !important;
-  color: white !important;
+  color: #ffffff !important;
+  border-color: var(--akos-blue) !important;
 }
+button#chat-submit:hover,
+button#stop-button:hover,
 button[type="submit"]:hover,
-button[aria-label*="Send"]:hover,
-button[aria-label*="end message"]:hover {
+button[aria-label*="Send" i]:hover,
+button[aria-label*="end message" i]:hover {
   background: var(--akos-blue-dark) !important;
+  border-color: var(--akos-blue-dark) !important;
+}
+button#chat-submit:disabled,
+button#chat-submit[disabled] {
+  background: var(--akos-blue-mid) !important;
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+/* Ikona znotraj gumba (SVG path uporablja currentColor) – bela */
+button#chat-submit svg,
+button#stop-button svg {
+  color: #ffffff !important;
 }
 
 /* ── Scrollbar ──────────────────────────────────────────── */
@@ -301,18 +319,49 @@ a[href*="github.com/Chainlit"] {
 img.logo,
 img[alt="logo"],
 header img[src*="/logo"] {
-  height: 38px !important;
-  width: auto !important;
-  max-width: 200px !important;
+  width: 200px !important;
+  height: auto !important;
+  max-width: 100% !important;
   object-fit: contain;
-  display: block;
+  display: block !important;
+  margin: 0 auto !important;
+}
+
+/* Welcome screen logo – vedno na sredini chat kolone, dovolj velik */
+.welcome-screen img.logo,
+.welcome-screen img[alt="logo"] {
+  width: 240px !important;
+  height: auto !important;
+  margin: 0 auto 16px auto !important;
+  display: block !important;
+}
+
+/* Welcome screen sam – centrira otroke (logo + input + starters),
+   ampak BREZ text-align center, da besedilo v inputu ostane levo. */
+.welcome-screen {
+  align-items: center !important;
 }
 
 /* Sidebar/menu logo - na ozkih zaslonih je manjši */
 nav img.logo,
 aside img.logo {
-  height: 32px !important;
-  max-width: 160px !important;
+  height: 56px !important;
+  max-width: 280px !important;
+}
+
+/* ════════════════════════════════════════════════════════════
+   Skrij theme toggle (light/dark stikalo) – uporabnik naj ne
+   menja barvne sheme, da AKOS branding ostane konsistenten.
+   ════════════════════════════════════════════════════════════ */
+button#theme-toggle,
+button#theme-toggle + div,
+[id="theme-toggle"],
+button[aria-label*="theme" i],
+button[aria-label*="Toggle theme" i] {
+  display: none !important;
+  visibility: hidden !important;
+  width: 0 !important;
+  pointer-events: none !important;
 }
 
 /* ════════════════════════════════════════════════════════════

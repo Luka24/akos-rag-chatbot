@@ -1,27 +1,36 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 56" width="220" height="56" fill="none">
-  <!-- Modri zaobljen kvadrat z belim signalom (kot favikona) -->
-  <rect x="2" y="6" width="44" height="44" rx="10" fill="#003B8E"/>
-  <g stroke="#ffffff" stroke-width="2.6" stroke-linecap="round" fill="none">
-    <path d="M11 36 A 14 14 0 0 1 37 36" opacity="0.55"/>
-    <path d="M16 36 A 9 9 0 0 1 32 36" opacity="0.85"/>
-    <path d="M20 36 A 5 5 0 0 1 28 36"/>
-  </g>
-  <circle cx="24" cy="36" r="2.4" fill="#ffffff"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 150" width="200" height="150" fill="none">
+  <defs>
+    <linearGradient id="akosGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#003B8E"/>
+      <stop offset="100%" stop-color="#0055CC"/>
+    </linearGradient>
+  </defs>
 
-  <!-- "AKOS" wordmark v AKOS modri -->
-  <text x="58" y="36"
+  <!-- Modri zaobljen kvadrat z belim signalom (vrh, centriran) -->
+  <rect x="68" y="4" width="64" height="64" rx="14" fill="url(#akosGrad)"/>
+  <g stroke="#ffffff" stroke-width="3.4" stroke-linecap="round" fill="none">
+    <path d="M78 50 A 22 22 0 0 1 122 50" opacity="0.45"/>
+    <path d="M86 50 A 14 14 0 0 1 114 50" opacity="0.75"/>
+    <path d="M92 50 A 8 8 0 0 1 108 50"/>
+  </g>
+  <circle cx="100" cy="50" r="3.6" fill="#ffffff"/>
+
+  <!-- "AKOS" wordmark (centriran) -->
+  <text x="100" y="108"
+        text-anchor="middle"
         font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
         font-weight="800"
-        font-size="26"
+        font-size="38"
         fill="#003B8E"
-        letter-spacing="1">AKOS</text>
+        letter-spacing="2">AKOS</text>
 
-  <!-- Podpisna vrstica -->
-  <text x="58" y="50"
+  <!-- Podpisna vrstica (centrirana) -->
+  <text x="100" y="130"
+        text-anchor="middle"
         font-family="'Segoe UI', 'Helvetica Neue', Arial, sans-serif"
-        font-weight="500"
-        font-size="9"
+        font-weight="600"
+        font-size="10"
         fill="#0055CC"
-        letter-spacing="0.5"
-        opacity="0.85">Asistent · ZEKom-2</text>
+        letter-spacing="1.4"
+        opacity="0.9">Asistent &#xb7; ZEKom-2</text>
 </svg>

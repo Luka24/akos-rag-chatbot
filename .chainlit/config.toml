@@ -92,10 +92,5 @@ custom_css = "/public/akos.css"
     icon_url = "/public/header-law.svg"
     url = "https://www.uradni-list.si/glasilo-uradni-list-rs/vsebina/2022-01-3901"
 
-[[UI.header_links]]
-    name = "Vlogi pritožbo"
-    icon_url = "/public/header-complaint.svg"
-    url = "https://www.akos-rs.si/za-uporabnike/pritozbe"
-
 [meta]
 generated_by = "2.3.0"
