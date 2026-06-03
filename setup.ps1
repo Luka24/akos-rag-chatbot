@@ -8,19 +8,24 @@
 
 $ErrorActionPreference = "Stop"
 
-function Get-PipCmd {
-    if (Get-Command pip -ErrorAction SilentlyContinue) { return @("pip") }
-    return @("python", "-m", "pip")
+function Invoke-Pip {
+    # Klice pip s podanimi argumenti. Uporabi "pip" ce je v PATH,
+    # sicer pade nazaj na "python -m pip". Splatting prek @Args je varen
+    # za en ali vec argumentov (za razliko od rocnega rezanja arrayja).
+    param([Parameter(ValueFromRemainingArguments=$true)]$Args)
+    if (Get-Command pip -ErrorAction SilentlyContinue) {
+        & pip @Args
+    } else {
+        & python -m pip @Args
+    }
 }
 
-$Pip = Get-PipCmd
-
 Write-Host ">>> Namescam odvisnosti..." -ForegroundColor Cyan
-& $Pip[0] @($Pip[1..($Pip.Length-1)] + @("install", "-r", "requirements.txt"))
+Invoke-Pip install -r requirements.txt
 if ($LASTEXITCODE -ne 0) { throw "pip install ni uspel" }
 
 Write-Host ">>> Iscem lokacijo namescenih paketov..." -ForegroundColor Cyan
-$showOutput = & $Pip[0] @($Pip[1..($Pip.Length-1)] + @("show", "chainlit"))
+$showOutput = Invoke-Pip show chainlit
 $locationLine = $showOutput | Where-Object { $_ -like "Location:*" } | Select-Object -First 1
 if (-not $locationLine) { throw "Ne najdem chainlit paketa (pip show chainlit)" }
 $Site = ($locationLine -replace "^Location:\s*", "").Trim()
