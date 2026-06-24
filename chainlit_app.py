@@ -206,14 +206,6 @@ def rename(orig_author: str) -> str:
 async def on_start():
     cl.user_session.set("history", [])
     cl.user_session.set("first_message", True)
-    await cl.Message(
-        author=ASSISTANT_NAME,
-        content=(
-            "> ℹ️ **Informativni AI asistent** – odgovori temeljijo na indeksiranih "
-            "dokumentih AKOS in ne predstavljajo pravno zavezujočega stališča agencije.  \n"
-            "> Za uradna stališča: **info@akos-rs.si** · 01 583 63 00 · pon.–pet. 9:00–13:00"
-        ),
-    ).send()
 
 
 # ---------------------------------------------------------------------------
