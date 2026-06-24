@@ -1,0 +1,22 @@
+{
+  "custom_fonts": [
+    "https://fonts.googleapis.com/css2?family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap"
+  ],
+  "variables": {
+    "light": {
+      "--font-sans":                    "'Source Sans 3', 'Segoe UI', system-ui, sans-serif",
+      "--primary":                      "215 100% 40%",
+      "--primary-foreground":           "0 0% 100%",
+      "--ring":                         "215 100% 40%",
+      "--radius":                       "0.6rem",
+      "--sidebar-background":           "217 62% 96%",
+      "--sidebar-foreground":           "215 100% 20%",
+      "--sidebar-primary":              "215 100% 28%",
+      "--sidebar-primary-foreground":   "0 0% 100%",
+      "--sidebar-accent":               "215 60% 91%",
+      "--sidebar-accent-foreground":    "215 100% 22%",
+      "--sidebar-border":               "215 40% 86%",
+      "--sidebar-ring":                 "215 100% 40%"
+    }
+  }
+}

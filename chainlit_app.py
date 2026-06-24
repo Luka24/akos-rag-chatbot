@@ -205,6 +205,15 @@ def rename(orig_author: str) -> str:
 @cl.on_chat_start
 async def on_start():
     cl.user_session.set("history", [])
+    cl.user_session.set("first_message", True)
+    await cl.Message(
+        author=ASSISTANT_NAME,
+        content=(
+            "> ℹ️ **Informativni AI asistent** – odgovori temeljijo na indeksiranih "
+            "dokumentih AKOS in ne predstavljajo pravno zavezujočega stališča agencije.  \n"
+            "> Za uradna stališča: **info@akos-rs.si** · 01 583 63 00 · pon.–pet. 9:00–13:00"
+        ),
+    ).send()
 
 
 # ---------------------------------------------------------------------------
@@ -213,15 +222,13 @@ async def on_start():
 
 def confidence_badge(conf: float) -> str:
     pct = round(conf * 100)
-    filled = round(conf * 10)
-    bar = "█" * filled + "░" * (10 - filled)
     if conf >= 0.8:
-        emoji, label = "🟢", "visoko"
+        emoji = "🟢"
     elif conf >= 0.5:
-        emoji, label = "🟡", "srednje"
+        emoji = "🟡"
     else:
-        emoji, label = "🔴", "nizko"
-    return f"{emoji} **{label}** `{bar}` {pct}%"
+        emoji = "🔴"
+    return f"{emoji} {pct} % zaupanja"
 
 
 def source_element_name(idx: int) -> str:
@@ -338,11 +345,8 @@ async def reply(message: cl.Message):
         ),
     ]
 
-    # 4) Sestavi besedilo odgovora
-    header_md = (
-        f"<span class='akos-badge akos-badge-topic'>📂 {topic}</span> "
-        f"&nbsp; {confidence_badge(conf)}\n\n"
-    )
+    # 4) Sestavi besedilo odgovora (brez HTML – unsafe_allow_html je false)
+    header_md = f"📂 **{topic}** · {confidence_badge(conf)}\n\n"
     full_text = header_md + answer + sources_summary_md(sources)
 
     # 5) Streaming word-by-word
@@ -363,6 +367,20 @@ async def reply(message: cl.Message):
     history.append({"role": "user", "content": message.content})
     history.append({"role": "assistant", "content": answer})
     cl.user_session.set("history", history)
+
+    # 7) Samodejno poimenuj nit po prvem vprašanju
+    if cl.user_session.get("first_message"):
+        cl.user_session.set("first_message", False)
+        thread_name = message.content[:60].strip()
+        if len(message.content) > 60:
+            thread_name += "…"
+        try:
+            await cl_data._data_layer.update_thread(
+                thread_id=cl.context.session.thread_id,
+                name=thread_name,
+            )
+        except Exception:
+            pass
 
 
 # ---------------------------------------------------------------------------
